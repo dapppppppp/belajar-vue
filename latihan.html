@@ -23,7 +23,9 @@
   <header>
   <img src="image/logo.png" width="80" alt="Logo Vue.js">
   <h1 v-text="name"></h1>
-  <p><input type="text" v-model="name"></p>
+
+  <h3>Form Submit.</h3>
+  <p><input type="text" placeholder="Nama Kelas" v-on:keyup.enter="submit"></p>
 
   <h3>Daftar Kelas({{kelas.length}})</h3>
 
@@ -109,6 +111,11 @@
                 },
                 gantimenu: function(data){
                     this.menu = data;
+                },
+                submit:function (event) {
+                    let text = event.target.value
+                    this.kelas.unshift(text);
+                    event.target.value = "";
                 }
             },
             computed: {
