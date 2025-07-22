@@ -26,11 +26,14 @@
   <p><input type="text" v-model="name"></p>
 
   <h3>Daftar Kelas({{kelas.length}})</h3>
-  <ul v-show="kelas.length > 1">
-    <li v-for="(item, index) of kelas">{{index+1}} - {{item}}</li>
-     </li>
-  </ul>
-  <!-- <li v-else>Kelas belum tersedia..</li> -->
+
+    <template v-if="kelas.length > 1">
+        <ul>
+            <li v-for="(item, index) of kelas">{{index+1}} - {{item}}</li>
+        </ul>
+    </template>
+
+  <li v-else>Kelas belum tersedia..</li>
 
 
     <h3>Perulangan (1-5)</h3>
@@ -82,8 +85,8 @@
               link: '<a href="">kelas.daffa</a>',
               gambar: 'image/react.png',
               menu: 'home',
-              kelas: [],
-              numbers: [1, 2, 3, 4, 5], 
+              kelas: ['Golang', 'PHP'],
+              numbers: [1, 2, 3, 4, 5],
 
 
             },
