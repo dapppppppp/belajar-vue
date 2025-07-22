@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue Beginners.</title>
+    <link href="https://fonts.googleapis.com/css?family=Quicksand&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 5%;
+            font-family: 'Quicksand', sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+<div id="app">
+  <header>
+  <img src="image/logo.png" width="80" alt="Logo Vue.js">
+  <h1 v-text="name.toUpperCase() "></h1>
+  <p>The Progressive JavaScript Framework</p>
+</header>
+
+    <footer id="footer">
+        <p>copyright 2019</p>
+    </footer>
+
+</div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.8"></script>
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+              name: 'Doremi Fasolasido',
+              message: 'Hello World!',
+              qty: 4,
+              namaDepan: 'Daffa',
+              namaBelakang: ' Reyhansyah',
+              bilangan: 3,
+              link: '<a href="">kelas.daffa</a>'
+
+            },
+            methods: {
+                getname: function () {
+                    return 'Hello ' + this.name;
+                },
+                ubahNama: function (newName) {
+                    this.name = newName;
+                    return this.getname()
+                },
+            },
+            computed: {
+                    totalBayar: function () {
+                        return this.qty * 10000
+                    },
+                    namaLengkap: function () {
+                        return this.namaDepan + this.namaBelakang
+                    },
+                    infoBilangan: function () {
+                        return this.bilangan % 2 === 0 ? 'genap' : 'ganjil'
+                    }
+
+                }
+        })
+    </script>
+</body>
+</html>
