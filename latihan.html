@@ -25,7 +25,7 @@
   <h1 v-text="name"></h1>
 
   <h3>Form Submit.</h3>
-  <p><input type="text" placeholder="Nama Kelas" v-on:keyup.enter="submit"></p>
+  <p><input type="text" placeholder="Nama Kelas" v-on:keyup.enter="submit" v-model="kelasbaru"></p>
 
   <h3>Daftar Kelas({{kelas.length}})</h3>
 
@@ -88,6 +88,7 @@
               gambar: 'image/react.png',
               menu: 'home',
               kelas: ['Golang', 'PHP'],
+              kelasbaru: "",
               numbers: [1, 2, 3, 4, 5],
 
 
@@ -114,9 +115,8 @@
                 },
                 submit:function (event) {
                     let text = event.target.value
-                    this.kelas.unshift(text);
-                    event.target.value = "";
-                }
+                    this.kelas.unshift(this.kelasbaru);
+                    this.kelasbaru = '';}
             },
             computed: {
                     totalBayar: function () {
