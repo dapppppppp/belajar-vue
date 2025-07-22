@@ -25,7 +25,8 @@
   <h1 v-text="name"></h1>
   <p><input type="text" v-model="name"></p>
 
-  <ul>
+  <h3>Daftar Kelas({{kelas.length}})</h3>
+  <ul v-if="kelas.length > 1">
     <li v-for="(item, index) of kelas">{{index+1}} - {{item}}</li>
      </li>
   </ul>
