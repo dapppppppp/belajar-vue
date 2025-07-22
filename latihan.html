@@ -58,9 +58,9 @@
   <img :src="gambar" width="100">
   <p>The Progressive JavaScript Framework</p>
 
-  <button v-bind:class="{active: menu === 'home'}" v-on:click="menu = 'home'">Home</button>
-  <button v-bind:class="{active: menu === 'about'}" v-on:click="menu = 'about'">About</button>
-  <button v-bind:class="{active: menu === 'blog'}" v-on:click="menu = 'blog'">Blog</button>
+  <a v-bind:class="{active: menu === 'home'}" href="#" v-on:click="gantimenu('home', $event)">Home</a>
+  <a v-bind:class="{active: menu === 'about'}" href="#" v-on:click="gantimenu('about', $event)">About</a>
+  <a v-bind:class="{active: menu === 'blog'}" href="#" v-on:click="gantimenu('blog', $event)">Blog</a>
 
 </header>
 
@@ -106,8 +106,11 @@
                     return data.filter(angka =>  {
                         return angka % 2 === 0;
                     });
-
-
+                },
+                gantimenu: function(data, event){
+                    event.preventDefault();
+                    console.log(event);
+                    this.menu = data;
                 }
             },
             computed: {
