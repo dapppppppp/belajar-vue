@@ -30,9 +30,9 @@
   <img :src="gambar" width="100">
   <p>The Progressive JavaScript Framework</p>
 
-  <button class="active">Home</button>
-  <button>About</button>
-  <button>Blog</button>
+  <button v-bind:class="{active: menu === 'home'}" v-on:click="menu = 'home'">Home</button>
+  <button v-bind:class="{active: menu === 'about'}" v-on:click="menu = 'about'">About</button>
+  <button v-bind:class="{active: menu === 'blog'}" v-on:click="menu = 'blog'">Blog</button>
 
 </header>
 
@@ -56,6 +56,7 @@
               bilangan: 1,
               link: '<a href="">kelas.daffa</a>',
               gambar: 'image/react.png',
+              menu: 'home'
 
 
             },
