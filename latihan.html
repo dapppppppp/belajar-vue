@@ -30,6 +30,8 @@
     <li v-for="(item, index) of kelas">{{index+1}} - {{item}}</li>
      </li>
   </ul>
+  <li v-else>Kelas belum tersedia..</li>
+
 
     <h3>Perulangan (1-5)</h3>
     <ul>
@@ -80,7 +82,7 @@
               link: '<a href="">kelas.daffa</a>',
               gambar: 'image/react.png',
               menu: 'home',
-              kelas: ['Golang', 'PHP', 'Python'],
+              kelas: [],
               numbers: [1, 2, 3, 4, 5], 
 
 
