@@ -20,7 +20,8 @@
 <body>
 
 <div id="app">
-    <header-component></header-component>
+    <header-component nama="Vuejs" gambar="image/logo.png"></header-component>
+    <header-component nama="React" gambar="image/react.png"></header-component>
 
 <main>
     <kelas />
@@ -33,10 +34,11 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.8"></script>
     <script>
         Vue.component('header-component', {
+            props: ['nama', 'gambar'],
             template: `
               <header>
-                <img src="image/logo.png" width="300">
-                <p v-text="pesan"></p>
+                <img :src="gambar" width="300">
+                <p>{{ 'Hello, ' + nama}}</p>
                 </header>
                 `,
                 data: function () {
