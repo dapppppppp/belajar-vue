@@ -24,6 +24,17 @@
   <img src="image/logo.png" width="80" alt="Logo Vue.js">
   <h1 v-text="name"></h1>
   <p><input type="text" v-model="name"></p>
+
+  <ul>
+    <li v-for="(item, index) of kelas">{{index+1}} - {{item}}</li>
+     </li>
+  </ul>
+
+    <h3>Perulangan (1-5)</h3>
+    <ul>
+      <li v-for="x in 5">{{x}}</li>
+    </ul>
+
   <p>{{kelas}}</p>
   <div>
     <label><input type="checkbox" value="React" v-model="kelas">React</label>
@@ -63,7 +74,7 @@
               link: '<a href="">kelas.daffa</a>',
               gambar: 'image/react.png',
               menu: 'home',
-              kelas: []
+              kelas: ['Golang', 'PHP', 'Python'],
 
 
             },
