@@ -23,19 +23,7 @@
     <header-component></header-component>
 
 <main>
-  <h3>Tambah Kelas.</h3>
-  <p><input type="text" placeholder="Nama Kelas" v-on:keyup.enter="submit" v-model="kelasbaru"></p>
-
-  <hr>
-  <h3>Daftar Kelas({{kelas.length}})</h3>
-
-    <template v-if="kelas.length > 1">
-        <ul>
-            <li v-for="(item, index) of kelas">{{index+1}} - {{item}}</li>
-        </ul>
-    </template>
-
-  <li v-else>Kelas belum tersedia..</li>
+    <kelas />
 </main>
     <footer-component></footer-component>
 
@@ -58,6 +46,40 @@
                 }
         })
 
+        Vue.component('kelas', {
+            template: ` 
+        <div>
+        <h3>Tambah Kelas.</h3>
+        <p><input type="text" placeholder="Nama Kelas" v-on:keyup.enter="submit" v-model="kelasbaru"></p>
+
+        <hr>
+        <h3>Daftar Kelas({{kelas.length}})</h3>
+
+        <template v-if="kelas.length > 1">
+            <ul>
+                <li v-for="(item, index) of kelas">{{index+1}} - {{item}}</li>
+            </ul>
+        </template>
+
+        <li v-else>Kelas belum tersedia..</li>
+        </div>
+        `,
+        data: function () {
+            return {
+                kelas: ['Golang', 'PHP'],
+                kelasbaru: "",
+            }
+        },
+        methods: {
+            submit:function (event) {
+            this.kelas.unshift(this.kelasbaru);
+            this.kelasbaru = '';}
+        },
+        
+      })
+
+
+
         Vue.component('footer-component', {
             template: `
               <footer>
@@ -69,16 +91,7 @@
 
         const vm = new Vue({
             el: '#app',
-            data: {
-              kelas: ['Golang', 'PHP'],
-              kelasbaru: "",
-
-            },
-            methods: {
-                submit:function (event) {
-                    let text = event.target.value
-                    this.kelas.unshift(this.kelasbaru);
-                    this.kelasbaru = '';}
+             methods: {
             },
             computed: {
 
