@@ -16,7 +16,9 @@
 <div id="app">
   <header>
   <img src="image/logo.png" width="80" alt="Logo Vue.js">
-  <h1 v-text="name.toUpperCase() "></h1>
+  <h1 v-text="name"></h1>
+
+  <img :src="gambar" width="100">
   <p>The Progressive JavaScript Framework</p>
 </header>
 
@@ -38,7 +40,9 @@
               namaDepan: 'Daffa',
               namaBelakang: ' Reyhansyah',
               bilangan: 3,
-              link: '<a href="">kelas.daffa</a>'
+              link: '<a href="">kelas.daffa</a>',
+              gambar: 'image/react.png',
+
 
             },
             methods: {
