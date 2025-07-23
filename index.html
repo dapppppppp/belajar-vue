@@ -197,11 +197,16 @@
             'home': Home
         },
         data: {
-            kelas: [
+            /*kelas: [
             {id: "1", judul : 'Vuejs', deskripsi: 'The Progressive JavaScript Framework', gambar: 'logo.png'},
             {id: "2", judul : 'React', deskripsi: 'A JavaScript library for building user interfaces', gambar: 'react.png'}
-            ]
+            ],*/
+            kelas: []
         },
+
+        created: function () {
+            this.kelas = JSON.parse(localStorage.getItem('kelas')) || []
+            },
 
         methods: {
             hapuskelas: function (id) {
