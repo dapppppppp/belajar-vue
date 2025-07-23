@@ -24,7 +24,8 @@
     <header-component nama="React" gambar="image/react.png"></header-component>
 
 <main>
-    <kelas v-bind:items="kelas" :input="kelasbaru"/>
+    <kelas v-bind:items="kelas" :input="kelasbaru"></kelas>
+    <home></home>
 </main>
     <footer-component></footer-component>
 
@@ -33,6 +34,10 @@
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.8"></script>
     <script>
+        const Home = {
+            template: `<div>Home</div>`
+        }
+
         Vue.component('header-component', {
             props: ['nama', 'gambar'],
             template: `
@@ -93,6 +98,9 @@
 
         const vm = new Vue({
             el: '#app',
+            components: {
+                'home': Home
+            },
             data: {
                 kelas: ['Golang', 'PHP'],
                 kelasbaru: "",       
