@@ -24,7 +24,7 @@
     <header-component nama="React" gambar="image/react.png"></header-component>
 
 <main>
-    <kelas v-bind:items="kelas" :input="kelasbaru" v-on:hapuskelas="hapuskelas"></kelas>
+    <kelas v-bind:items="kelas" v-on:submitkelas="submitkelas" v-on:hapuskelas="hapuskelas"></kelas>
     <home></home>
 </main>
     <footer-component></footer-component>
@@ -54,11 +54,11 @@
         })
 
         Vue.component('kelas', {
-            props: ['items', 'input'],
+            props: ['items', ],
             template: ` 
         <div>
         <h3>Tambah Kelas.</h3>
-        <p><input type="text" placeholder="Nama Kelas" v-on:keyup.enter="submit" v-model="input"></p>
+        <p><input type="text" placeholder="Nama Kelas" v-on:keyup.enter="$emit ('submitkelas', $event)"></p>
 
         <hr>
         <h3>Daftar Kelas({{items.length}})</h3>
@@ -79,12 +79,7 @@
 
             }
         },
-        methods: {
-            submit:function (event) {
-            this.kelas.unshift(this.kelasbaru);
-            this.kelasbaru = '';}
-        },
-        
+
       })
 
 
@@ -105,11 +100,15 @@
             },
             data: {
                 kelas: ['Golang', 'PHP'],
-                kelasbaru: "",       
-            },      
+            },    
+
             methods: {
                 hapuskelas: function (index) {
                     this.kelas.splice(index, 1);
+                },
+                submitkelas: function (event) {
+                    const text = event.target.value;
+                    this.kelas.unshift(text)
                 }
             },
             computed: {
