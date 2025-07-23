@@ -15,6 +15,14 @@
             border: 0;
             padding: 5px
         }
+
+        .error {
+            color: red;
+        }
+
+        .input-group {
+            margin-bottom: 5px;
+        }
     </style>
 </head>
 <body>
@@ -60,7 +68,11 @@
             <div>
             <h3>Tambah Kelas.</h3>
             <form v-on:submit.prevent="submitkelas" >
-            <p><input type="text" v-model="kelas.judul" placeholder="Nama Kelas"></p>
+            <div class="input-group">
+                <input type="text" v-model="kelas.judul" placeholder="Nama Kelas">
+                <div class="error" v-if="error.judul"><small>{{error.judul}}</small></div>
+            </div>
+
 
             <div class="input-group">
                 <label>Deskripsi: </label> <br>
@@ -98,13 +110,20 @@
                     deskripsi: "",
                     gambar: ""
                 },
-                previewimg: ""
+                previewimg: "",
+                error: {
+                    judul:'',
+                    deskripsi: '',
+                }
             }
         },
         methods: {
             submitkelas: function(){
+                if (!this.kelas.judul) {
+                    this.error.judul = "Judul kelas harus diisi";
+                }
                 const data = {
-                    id: uuid.v4(), // Fixed: using uuid.v4() instead of uuidv4()
+                    id: uuid.v4(),
                     judul: this.kelas.judul,
                     deskripsi: this.kelas.deskripsi,
                     gambar: this.kelas.gambar
