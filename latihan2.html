@@ -21,12 +21,17 @@
 
 <div id="app">
     <header-component nama="Vuejs" gambar="image/logo.png"></header-component>
-    <header-component nama="React" gambar="image/react.png"></header-component>
+    <nav>
+        <router-link to ="/">Home</router-link>
+        <router-link to ="/about">About</router-link>
+        <router-link to ="/kelas">Kelas</router-link>
+    </nav>
 
-<main>
-    <kelas v-bind:items="kelas" v-on:submitkelas="submitkelas" v-on:hapuskelas="hapuskelas"></kelas>
-    <home></home>
-</main>
+    <main>
+        <!-- <kelas v-bind:items="kelas" v-on:submitkelas="submitkelas" v-on:hapuskelas="hapuskelas"></kelas> -->
+        <!-- <home></home> -->
+        <router-view v-bind:items="kelas" v-on:submitkelas="submitkelas" v-on:hapuskelas="hapuskelas"></router-view>
+    </main>
     <footer-component>
         <p>copyright 2025 - kelas.daffaReyhansyah</p>
     </footer-component>
@@ -34,89 +39,99 @@
 </div>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.8"></script>
-    <script>
-        const Home = {
-            template: `<div>Home</div>`
-        }
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.8"></script>
+<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue-router@3.0.2/dist/vue-router.js"></script>
+<script>
+    const Home = {
+        template: `<div>Home</div>`
+    }
 
-        Vue.component('header-component', {
-            props: ['nama', 'gambar'],
-            template: `
-              <header>
+    const About = {
+        template: `<div>About</div>`
+    }
+
+    const Kelas = {
+        props: ['items',],
+        template: `
+            <div>
+            <h3>Tambah Kelas.</h3>
+            <p><input type="text" placeholder="Nama Kelas" v-on:keyup.enter="$emit ('submitkelas', $event)"></p>
+
+            <hr>
+            <h3>Daftar Kelas({{items.length}})</h3>
+
+            <template v-if="items.length">
+                <ul>
+                    <li v-for="(item, index) of items">{{index+1}} - {{item}}
+                        <a href="" v-on:click.prevent="$emit('hapuskelas', index)">hapus</a>
+                    </li>
+                </ul>
+            </template>
+
+            <li v-else>Kelas belum tersedia..</li>
+            </div>
+            `,
+        data: function () {
+            return {}
+        },
+        methods: {}
+    }
+
+    Vue.component('header-component', {
+        props: ['nama', 'gambar'],
+        template: `
+            <header>
                 <img :src="gambar" width="300">
                 <p>{{ 'Hello, ' + nama}}</p>
-                </header>
-                `, 
-                data: function () {
-                    return {
-                        pesan: 'Hello, Component!',           
-                    }
-                }
-        })
-
-        Vue.component('kelas', {
-            props: ['items', ],
-            template: ` 
-        <div>
-        <h3>Tambah Kelas.</h3>
-        <p><input type="text" placeholder="Nama Kelas" v-on:keyup.enter="$emit ('submitkelas', $event)"></p>
-
-        <hr>
-        <h3>Daftar Kelas({{items.length}})</h3>
-
-        <template v-if="items.length">
-            <ul>
-                <li v-for="(item, index) of items">{{index+1}} - {{item}}
-                    <a href="" v-on:click.prevent="$emit('hapuskelas', index)">hapus</a>
-                </li>
-            </ul>
-        </template>
-
-        <li v-else>Kelas belum tersedia..</li>
-        </div>
-        `,
+            </header>
+            `,
         data: function () {
             return {
-
+                pesan: 'Hello, Component!',
             }
+        }
+    })
+
+    Vue.component('footer-component', {
+        template: `
+            <footer>
+                <slot></slot>
+            </footer>
+            `
+    })
+
+    const routes = [
+        {path: '/', component: Home},
+        {path: '/about', component: About},
+        {path: '/kelas', component: Kelas}
+    ]
+    const router = new VueRouter({
+        routes
+    })
+
+
+    const vm = new Vue({
+        el: '#app',
+        router,
+        components: {
+            'home': Home
+        },
+        data: {
+            kelas: ['Golang', 'PHP'],
         },
 
-      })
-
-
-
-        Vue.component('footer-component', {
-            template: `
-              <footer>
-            <slot></slot>
-              </footer>
-                `
-        })
-
-
-        const vm = new Vue({
-            el: '#app',
-            components: {
-                'home': Home
+        methods: {
+            hapuskelas: function (index) {
+                this.kelas.splice(index, 1);
             },
-            data: {
-                kelas: ['Golang', 'PHP'],
-            },    
-
-            methods: {
-                hapuskelas: function (index) {
-                    this.kelas.splice(index, 1);
-                },
-                submitkelas: function (event) {
-                    const text = event.target.value;
-                    this.kelas.unshift(text)
-                }
-            },
-            computed: {
-
-                }
-        })
-    </script>
+            submitkelas: function (event) {
+                const text = event.target.value;
+                this.kelas.unshift(text)
+            }
+        },
+        computed: {}
+    })
+</script>
 </body>
 </html>
