@@ -50,6 +50,10 @@
         template: `<div>About</div>`
     }
 
+    const NotFound = {
+        template: `<div>404 Not Found</div>`
+    }
+
     const Kelas = {
         props: ['items',],
         template: `
@@ -148,7 +152,8 @@
     const routes = [
         {path: '/', component: Home},
         {path: '/about', component: About},
-        {path: '/kelas', component: Kelas}
+        {path: '/kelas', component: Kelas},
+        {path: '*', component: NotFound} 
     ]
     const router = new VueRouter({
         mode: 'history',
