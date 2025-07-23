@@ -20,7 +20,7 @@
 <body>
 
 <div id="app">
-    <header-component nama="Vuejs" gambar="image/logo.png"></header-component>
+    <header-component nama="Vuejs" gambar="https://vuejs.org/images/logo.png"></header-component>
     <nav>
         <router-link to ="/">Home</router-link>
         <router-link to ="/about">About</router-link>
@@ -28,8 +28,6 @@
     </nav>
 
     <main>
-        <!-- <kelas v-bind:items="kelas" v-on:submitkelas="submitkelas" v-on:hapuskelas="hapuskelas"></kelas> -->
-        <!-- <home></home> -->
         <router-view v-bind:items="kelas" v-on:submitkelas="submitkelas" v-on:hapuskelas="hapuskelas"></router-view>
     </main>
     <footer-component>
@@ -38,10 +36,11 @@
 
 </div>
 
-
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.8"></script>
 <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue-router@3.0.2/dist/vue-router.js"></script>
+<!-- Fixed UUID import -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuid.min.js"></script>
 <script>
     const Home = {
         template: `<div>Home</div>`
@@ -56,8 +55,20 @@
         template: `
             <div>
             <h3>Tambah Kelas.</h3>
-            <p><input type="text" placeholder="Nama Kelas" v-on:keyup.enter="$emit ('submitkelas', $event)"></p>
+            <form v-on:submit.prevent="submitkelas" >
+            <p><input type="text" v-model="kelas.judul" placeholder="Nama Kelas"></p>
 
+            <div class="input-group">
+                <label>Deskripsi: </label> <br>
+                <textarea v-model="kelas.deskripsi"></textarea>
+            </div>
+
+            <div class="input-group">
+                <label>Masukkan Gambar</label> <br>
+                <input type="file" />
+            </div>
+            <button type="submit">Submit</button>
+        </form>
             <hr>
             <h3>Daftar Kelas({{items.length}})</h3>
 
@@ -73,11 +84,29 @@
             </div>
             `,
         data: function () {
-            return {}
+            return {
+                kelas:{
+                    judul: "",
+                    deskripsi: "",
+                    gambar: ""
+                }
+            }
         },
-        methods: {}
-    }
+        methods: {
+            submitkelas: function(){
+                const data = {
+                    id: uuid.v4(), // Fixed: using uuid.v4() instead of uuidv4()
+                    judul: this.kelas.judul,
+                    deskripsi: this.kelas.deskripsi,
+                    gambar: null
+                }
+                this.$emit('submitkelas', data);
 
+                this.kelas.judul = "";
+                this.kelas.deskripsi = "";
+            }
+        }
+    }
     Vue.component('header-component', {
         props: ['nama', 'gambar'],
         template: `
@@ -107,7 +136,7 @@
         {path: '/kelas', component: Kelas}
     ]
     const router = new VueRouter({
-        mode: 'history', 
+        mode: 'history',
         routes
     })
 
@@ -120,8 +149,8 @@
         },
         data: {
             kelas: [
-            {id: "1", judul : 'Vuejs', deskripsi: 'The Progressive JavaScript Framework', gambar: 'image/logo.png'},
-            {id: "2", judul : 'React', deskripsi: 'A JavaScript library for building user interfaces', gambar: 'image/react.png'}
+            {id: "1", judul : 'Vuejs', deskripsi: 'The Progressive JavaScript Framework', gambar: 'https://vuejs.org/images/logo.png'},
+            {id: "2", judul : 'React', deskripsi: 'A JavaScript library for building user interfaces', gambar: 'https://reactjs.org/logo-og.png'}
             ]
         },
 
@@ -129,9 +158,8 @@
             hapuskelas: function (id) {
                 this.kelas = this.kelas.filter(item => item.id !== id);
             },
-            submitkelas: function (event) {
-                const text = event.target.value;
-                this.kelas.unshift(text)
+            submitkelas: function (data) {
+                this.kelas.push(data)
             }
         },
         computed: {}
