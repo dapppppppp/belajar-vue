@@ -75,8 +75,11 @@
 
             <template v-if="items.length">
                 <ul>
-                    <li v-for="(item, index) of items">{{index+1}} - {{item.judul}}
+                    <li v-for="(item, index) of items">
+                        <img :src="'image/' + item.gambar"width="100" />
+                        <p>{{index+1}} - {{item.judul}}
                         <a href="" v-on:click.prevent="$emit('hapuskelas', item.id)">hapus</a>
+                        </p>
                     </li>
                 </ul>
             </template>
@@ -161,8 +164,8 @@
         },
         data: {
             kelas: [
-            {id: "1", judul : 'Vuejs', deskripsi: 'The Progressive JavaScript Framework', gambar: 'https://vuejs.org/images/logo.png'},
-            {id: "2", judul : 'React', deskripsi: 'A JavaScript library for building user interfaces', gambar: 'https://reactjs.org/logo-og.png'}
+            {id: "1", judul : 'Vuejs', deskripsi: 'The Progressive JavaScript Framework', gambar: 'logo.png'},
+            {id: "2", judul : 'React', deskripsi: 'A JavaScript library for building user interfaces', gambar: 'react.png'}
             ]
         },
 
