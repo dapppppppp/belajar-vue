@@ -27,7 +27,9 @@
     <kelas v-bind:items="kelas" v-on:submitkelas="submitkelas" v-on:hapuskelas="hapuskelas"></kelas>
     <home></home>
 </main>
-    <footer-component></footer-component>
+    <footer-component>
+        <p>copyright 2025 - kelas.daffaReyhansyah</p>
+    </footer-component>
 
 </div>
 
@@ -87,7 +89,7 @@
         Vue.component('footer-component', {
             template: `
               <footer>
-                <p>copyright 2025 - kelas.daffaReyhansyah</p>
+            <slot></slot>
               </footer>
                 `
         })
