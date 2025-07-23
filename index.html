@@ -122,7 +122,7 @@
             submitkelas: function(){
                 this.error.judul = '';
                 this.error.deskripsi = '';
-                
+
                 if (this.kelas.judul == '') {
                     this.error.judul = "Judul kelas harus diisi";
                 }
@@ -209,6 +209,7 @@
             },
             submitkelas: function (data) {
                 this.kelas.push(data)
+                localStorage.setItem('kelas', JSON.stringify(this.kelas))
             }
         },
         computed: {}
