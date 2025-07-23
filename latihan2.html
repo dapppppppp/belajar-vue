@@ -24,7 +24,7 @@
     <header-component nama="React" gambar="image/react.png"></header-component>
 
 <main>
-    <kelas v-bind:items="kelas" :input="kelasbaru"></kelas>
+    <kelas v-bind:items="kelas" :input="kelasbaru" v-on:hapuskelas="hapuskelas"></kelas>
     <home></home>
 </main>
     <footer-component></footer-component>
@@ -63,9 +63,11 @@
         <hr>
         <h3>Daftar Kelas({{items.length}})</h3>
 
-        <template v-if="items.length > 1">
+        <template v-if="items.length">
             <ul>
-                <li v-for="(item, index) of items">{{index+1}} - {{item}}</li>
+                <li v-for="(item, index) of items">{{index+1}} - {{item}}
+                    <a href="" v-on:click.prevent="$emit('hapuskelas', index)">hapus</a>
+                </li>
             </ul>
         </template>
 
@@ -106,6 +108,9 @@
                 kelasbaru: "",       
             },      
             methods: {
+                hapuskelas: function (index) {
+                    this.kelas.splice(index, 1);
+                }
             },
             computed: {
 
