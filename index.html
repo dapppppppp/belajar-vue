@@ -268,21 +268,24 @@
                 console.log('updated')
             },
         methods: {
-            resultData(items){
-                this.kelas = []; // Clear array first to avoid duplicates
-                const data = items.val();
-                if (data) {
-                    Object.keys(data).forEach(key => {
-                        this.kelas.push(data[key]);
-                    });
-                }
-            },
+           resultData(snapshot) {
+  this.kelas = []  // kosongkan dulu biar tidak menumpuk
+  snapshot.forEach(childSnapshot => {
+    let data = {
+      id: childSnapshot.key,
+      judul: childSnapshot.val().judul,
+      deskripsi: childSnapshot.val().deskripsi,
+      gambar: childSnapshot.val().gambar
+    }
+    this.kelas.push(data)
+  })
+},
+
             errorData(error){
                 console.log('Firebase error:', error)
             },
             hapuskelas: function (id) {
-                this.kelas = this.kelas.filter(item => item.id !== id);
-                localStorage.setItem('kelas', JSON.stringify(this.kelas))
+                database.ref('/kelas/' + id).remove()
                 swal({
                     text: "Kelas berhasil dihapus!",
                     icon: "warning",
