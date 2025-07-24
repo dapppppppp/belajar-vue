@@ -193,7 +193,6 @@
 
 
     const vm = new Vue({
-        el: '#app',
         router,
         components: {
             'home': Home
@@ -208,8 +207,20 @@
 
         created: function () {
             this.kelas = JSON.parse(localStorage.getItem('kelas')) || []
+            console.log('created')
             },
-
+            beforeCreate () {
+                console.log('beforeCreate')
+            },
+            mounted () {
+                console.log('mounted')
+            },
+            beforeupdate () {
+                console.log('beforeUpdate')
+            },
+            updated () {
+                console.log('updated')
+            },
         methods: {
             hapuskelas: function (id) {
                 this.kelas = this.kelas.filter(item => item.id !== id);
@@ -232,6 +243,8 @@
         },
         computed: {}
     })
+
+    vm.$mount('#app')
 </script>
 </body>
 </html>
