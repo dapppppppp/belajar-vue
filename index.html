@@ -49,6 +49,8 @@
 <script src="https://cdn.jsdelivr.net/npm/vue-router@3.0.2/dist/vue-router.js"></script>
 <!-- Fixed UUID import -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuid.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 <script>
     const Home = {
         template: `<div>Home</div>`
@@ -215,6 +217,12 @@
             submitkelas: function (data) {
                 this.kelas.push(data)
                 localStorage.setItem('kelas', JSON.stringify(this.kelas))
+
+                swal({
+                    title: this.kelas.judul,
+                    text: "Kelas berhasil ditambahkan!",
+                    icon: "success",
+                })
             }
         },
         computed: {}
