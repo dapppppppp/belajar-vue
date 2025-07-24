@@ -45,12 +45,11 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.8"></script>
-<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue-router@3.0.2/dist/vue-router.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuid.min.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.23.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.23.0/firebase-database.js"></script>
 <script>
   
 // TODO: Add SDKs for Firebase products that you want to use
@@ -63,7 +62,8 @@
     projectId: "tutorial-vuejs-2becd",
     storageBucket: "tutorial-vuejs-2becd.firebasestorage.app",
     messagingSenderId: "1068237921098",
-    appId: "1:1068237921098:web:7f1ab961e02a8675f67fb3"
+    appId: "1:1068237921098:web:7f1ab961e02a8675f67fb3",
+    databaseURL:"https://tutorial-vuejs-2becd-default-rtdb.asia-southeast1.firebasedatabase.app"
   };
 
   // Initialize Firebase
@@ -85,7 +85,10 @@
 
     const detailKelas = {
         template: `<div>
-            <img :src="url_gambar(detailKelas.gambar)" width="200" />
+            <img v-if="detailKelas.gambar" :src="url_gambar(detailKelas.gambar)" width="200" />
+            <div v-else style="width:200px; height:150px; background:#f0f0f0; display:flex; align-items:center; justify-content:center;">
+                <span>No Image</span>
+            </div>
             <h3>{{detailKelas.judul}} - {{$route.params.idkelas}}</h3>
             <p>{{detailKelas.deskripsi}}</p>
             <router-link to="/kelas">Kembali ke daftar kelas</router-link>
@@ -100,13 +103,14 @@
         },
         methods:{
             filterkelas(){
-                let kelas = JSON.parse(localStorage.getItem('kelas'))
+                // Get from Firebase data instead of localStorage
+                const parent = this.$parent;
                 let id = this.$route.params.idkelas;
-                let item = kelas.filter(k => k.id ==id)
-                this.detailKelas = item[0];
+                let item = parent.kelas.find(k => k.id === id);
+                this.detailKelas = item || {};
             },
             url_gambar: function(gambar) {
-                return '../image/' + gambar
+                return '/image/' + gambar
             }
         }
     }
@@ -141,8 +145,13 @@
 
             <template v-if="items.length">
                 <ul>
-                    <li v-for="(item, index) of items">
-                        <img :src="'image/' + item.gambar"width="100" />
+                    <li v-for="(item, index) of items" :key="item.id">
+                        <div v-if="item.gambar" style="display:inline-block;">
+                            <img :src="'/image/' + item.gambar" width="100" />
+                        </div>
+                        <div v-else style="width:100px; height:75px; background:#f0f0f0; display:inline-flex; align-items:center; justify-content:center;">
+                            <span style="font-size:12px;">No Image</span>
+                        </div>
                         <p>{{index+1}} - {{item.judul}}
                         <a href="" v-on:click.prevent="$emit('hapuskelas', item.id)">hapus</a>
                         <router-link :to="'/kelas/' + item.id">Lihat kelas</router-link>
@@ -185,7 +194,7 @@
                     id: uuid.v4(),
                     judul: this.kelas.judul,
                     deskripsi: this.kelas.deskripsi,
-                    gambar: this.kelas.gambar
+                    gambar: this.kelas.gambar || null // Handle undefined gambar
                 }
                 this.$emit('submitkelas', data);
 
@@ -197,11 +206,11 @@
                 }
             },
             upload: function(event){
-                const namagambar = event.target.files[0];
-                this.kelas.gambar = namagambar;
-                this.previewimg = URL.createObjectURL(event.target.files[0]);
-
-
+                const file = event.target.files[0];
+                if (file) {
+                    this.kelas.gambar = file.name; // Store filename instead of file object
+                    this.previewimg = URL.createObjectURL(file);
+                }
             }
         }
     }
@@ -251,10 +260,6 @@
             'home': Home
         },
         data: {
-            /*kelas: [
-            {id: "1", judul : 'Vuejs', deskripsi: 'The Progressive JavaScript Framework', gambar: 'logo.png'},
-            {id: "2", judul : 'React', deskripsi: 'A JavaScript library for building user interfaces', gambar: 'react.png'}
-            ],*/
             kelas: []
         },
 
@@ -274,29 +279,60 @@
                 console.log('updated')
             },
         methods: {
-            resultData(items){
-                console.log(items.val())
+            resultData(snapshot){
+                this.kelas = []; // Clear existing data first
+                const data = snapshot.val();
+                if (data) {
+                    // Convert Firebase object to array
+                    Object.keys(data).forEach(key => {
+                        this.kelas.push({
+                            ...data[key],
+                            firebaseKey: key // Store Firebase key for updates/deletes
+                        });
+                    });
+                }
             },
             errorData(error){
-                console.log(error)
+                console.log('Firebase error:', error)
             },
             hapuskelas: function (id) {
-                this.kelas = this.kelas.filter(item => item.id !== id);
-                localStorage.setItem('kelas', JSON.stringify(this.kelas))
-                swal({
-                    text: "Kelas berhasil dihapus!",
-                    icon: "warning",
-                })
+                // Find item with Firebase key
+                const item = this.kelas.find(k => k.id === id);
+                if (item && item.firebaseKey) {
+                    // Delete from Firebase
+                    kelasRef.child(item.firebaseKey).remove()
+                        .then(() => {
+                            swal({
+                                text: "Kelas berhasil dihapus!",
+                                icon: "success",
+                            });
+                        })
+                        .catch(error => {
+                            console.error('Error deleting:', error);
+                            swal({
+                                text: "Error menghapus kelas!",
+                                icon: "error",
+                            });
+                        });
+                }
             },
             submitkelas: function (data) {
-                this.kelas.push(data)
-                localStorage.setItem('kelas', JSON.stringify(this.kelas))
-
-                swal({
-                    title: this.data.judul,
-                    text: "Kelas berhasil ditambahkan!",
-                    icon: "success",
-                })
+                // Save to Firebase instead of localStorage
+                kelasRef.push(data)
+                    .then(() => {
+                        swal({
+                            title: data.judul,
+                            text: "Kelas berhasil ditambahkan!",
+                            icon: "success",
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error saving:', error);
+                        swal({
+                            text: "Error menambahkan kelas!",
+                            icon: "error",
+                        });
+                    });
             }
         },
         computed: {}
