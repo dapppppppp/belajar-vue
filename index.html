@@ -213,13 +213,18 @@
         methods: {
             hapuskelas: function (id) {
                 this.kelas = this.kelas.filter(item => item.id !== id);
+                localStorage.setItem('kelas', JSON.stringify(this.kelas))
+                swal({
+                    text: "Kelas berhasil dihapus!",
+                    icon: "warning",
+                })
             },
             submitkelas: function (data) {
                 this.kelas.push(data)
                 localStorage.setItem('kelas', JSON.stringify(this.kelas))
 
                 swal({
-                    title: this.kelas.judul,
+                    title: this.data.judul,
                     text: "Kelas berhasil ditambahkan!",
                     icon: "success",
                 })
