@@ -100,10 +100,11 @@
         },
         methods:{
             filterkelas(){
-                let kelas = JSON.parse(localStorage.getItem('kelas')) || [];
                 let id = this.$route.params.idkelas;
-                let item = kelas.find(k => k.id == id);
-                this.detailKelas = item || {};
+                let kelasDetailRef = database.ref('/kelas/' + id)
+                kelasDetailRef.on('value', (item) => {
+                    this.detailKelas = item.val()
+                })
             },
             url_gambar: function(gambar) {
                 return '/image/' + gambar
@@ -255,31 +256,20 @@
         created: function() {
             kelasRef.on('value', this.resultData, this.errorData)
             },
-            beforeCreate () {
-                console.log('beforeCreate')
-            },
-            mounted () {
-                console.log('mounted')
-            },
-            beforeupdate () {
-                console.log('beforeUpdate')
-            },
-            updated () {
-                console.log('updated')
-            },
+
         methods: {
            resultData(snapshot) {
-  this.kelas = []  // kosongkan dulu biar tidak menumpuk
-  snapshot.forEach(childSnapshot => {
-    let data = {
-      id: childSnapshot.key,
-      judul: childSnapshot.val().judul,
-      deskripsi: childSnapshot.val().deskripsi,
-      gambar: childSnapshot.val().gambar
-    }
-    this.kelas.push(data)
-  })
-},
+            this.kelas = []  // kosongkan dulu biar tidak menumpuk
+            snapshot.forEach(childSnapshot => {
+                let data = {
+                id: childSnapshot.key,
+                judul: childSnapshot.val().judul,
+                deskripsi: childSnapshot.val().deskripsi,
+                gambar: childSnapshot.val().gambar
+                }
+                this.kelas.push(data)
+            })
+            },
 
             errorData(error){
                 console.log('Firebase error:', error)
