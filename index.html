@@ -64,8 +64,32 @@
         template: `<div>404 Not Found</div>`
     }
 
-    const detailKelas={
-        template: '<div>Hello, Detail Kelas</div>'
+    const detailKelas = {
+        template: `<div>
+            <img :src="url_gambar(detailKelas.gambar)" width="200" />
+            <h3>{{detailKelas.judul}} - {{$route.params.idkelas}}</h3>
+            <p>{{detailKelas.deskripsi}}</p>
+            <router-link to="/kelas">Kembali ke daftar kelas</router-link>
+        </div>`,
+        data() {
+            return {
+                detailKelas: {}
+            }
+            },
+            created() {
+                this.filterkelas()
+        },
+        methods:{
+            filterkelas(){
+                let kelas = JSON.parse(localStorage.getItem('kelas'))
+                let id = this.$route.params.idkelas;
+                let item = kelas.filter(k => k.id ==id)
+                this.detailKelas = item[0];
+            },
+            url_gambar: function(gambar) {
+                return '../image/' + gambar
+            }
+        }
     }
 
     const Kelas = {
@@ -190,7 +214,7 @@
         {path: '/about', component: About},
         {path: '/kelas', component: Kelas},
         {
-            path: '/kelas/:id',
+            path: '/kelas/:idkelas',
             component: detailKelas
         },
         {path: '*', component: NotFound},
