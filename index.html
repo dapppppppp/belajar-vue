@@ -64,6 +64,10 @@
         template: `<div>404 Not Found</div>`
     }
 
+    const detailKelas={
+        template: '<div>Hello, Detail Kelas</div>'
+    }
+
     const Kelas = {
         props: ['items',],
         template: `
@@ -98,6 +102,7 @@
                         <img :src="'image/' + item.gambar"width="100" />
                         <p>{{index+1}} - {{item.judul}}
                         <a href="" v-on:click.prevent="$emit('hapuskelas', item.id)">hapus</a>
+                        <router-link :to="'/kelas/' + item.id">Lihat kelas</router-link>
                         </p>
                     </li>
                 </ul>
@@ -184,7 +189,12 @@
         {path: '/', component: Home},
         {path: '/about', component: About},
         {path: '/kelas', component: Kelas},
-        {path: '*', component: NotFound} 
+        {
+            path: '/kelas/:id',
+            component: detailKelas
+        },
+        {path: '*', component: NotFound},
+
     ]
     const router = new VueRouter({
         mode: 'history',
