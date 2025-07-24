@@ -47,10 +47,27 @@
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.8"></script>
 <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue-router@3.0.2/dist/vue-router.js"></script>
-<!-- Fixed UUID import -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuid.min.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
 
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyBQRYIqi9MGhsd6K9y2v4JHa9XN8oHZQOE",
+    authDomain: "tutorial-vuejs-2becd.firebaseapp.com",
+    projectId: "tutorial-vuejs-2becd",
+    storageBucket: "tutorial-vuejs-2becd.firebasestorage.app",
+    messagingSenderId: "1068237921098",
+    appId: "1:1068237921098:web:7f1ab961e02a8675f67fb3"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+</script>
 <script>
     const Home = {
         template: `<div>Home</div>`
