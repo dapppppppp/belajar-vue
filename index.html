@@ -289,8 +289,12 @@
                 })
             },
             submitkelas: function (data) {
-                this.kelas.push(data)
-                localStorage.setItem('kelas', JSON.stringify(this.kelas))
+                this.kelas = []
+                kelasRef.push({
+                    judul: data.judul,
+                    deskripsi: data.deskripsi,
+                    gambar: data.gambar
+                })
 
                 swal({
                     title: data.judul,
